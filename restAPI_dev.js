@@ -3,18 +3,24 @@ const path = require('path');
 
 const app = express();
 
-// API routes
-const api_routes = require('./api_routes_dev.js');
-app.use('/api', api_routes);
+// Routes
+const apiRoutes = require('./api_routes_dev');
+app.use('/api', apiRoutes);
 
-// serve static files (JS, CSS)
+// Serve static frontend files
 app.use(express.static(__dirname));
 
-// serve HTML
+// Serve HTML
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dev_html.html'));
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
-});
+// Export for Vercel
+module.exports = app;
+
+// ONLY listen locally
+if (require.main === module) {
+  app.listen(3000, () => {
+    console.log('Server running on port 3000');
+  });
+}
